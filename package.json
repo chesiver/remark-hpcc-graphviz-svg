@@ -1,6 +1,6 @@
 {
   "name": "remark-hpcc-graphviz-svg",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A remark plugin to convert GraphViz code into SVG diagram",
   "type": "module",
   "types": "./index.d.ts",
