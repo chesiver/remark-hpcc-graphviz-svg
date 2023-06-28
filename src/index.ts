@@ -4,7 +4,7 @@ import { visit } from "unist-util-visit";
 import { Code, Parent } from "mdast";
 import { unified } from "unified";
 import rehypeParse from "rehype-parse";
-import hpccWasm from "@hpcc-js/wasm";
+import * as hpccWasm from "@hpcc-js/wasm";
 import { optimize, OptimizeOptions, OptimizedError } from "svgo";
 
 export const defaultSvgoOptions: OptimizeOptions = {
@@ -16,8 +16,7 @@ export const defaultSvgoOptions: OptimizeOptions = {
 export const remarkGraphvizSvg: Plugin<[RemarkGraphvizSvgOptions?]> = (options) => {
 	// Destructure options
 	const {
-		language = "graphviz",
-		graphvizEngine = "dot",
+		language = "dot",
 		svgoOptions = defaultSvgoOptions
 	} = (options ?? {});
 
@@ -36,8 +35,8 @@ export const remarkGraphvizSvg: Plugin<[RemarkGraphvizSvgOptions?]> = (options) 
 
 		// Wait for rendering all instances
 		const diagrams = await Promise.all(instances.map(async ([code]) => {
-			let svg = await hpccWasm.graphviz
-				.layout(code, "svg", graphvizEngine);
+			const graphviz = await hpccWasm.Graphviz.load();
+			let svg = graphviz.dot(code);
 			// optimize svg
 			if (svgoOptions !== null) {
 				const result = optimize(svg, svgoOptions);

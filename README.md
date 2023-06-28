@@ -1,19 +1,20 @@
-# remark-graphviz-svg
+# remark-hpcc-graphviz-svg
 
-[![Version](https://img.shields.io/npm/v/remark-graphviz-svg.svg)](https://npmjs.org/package/remark-graphviz-svg)
+[![Version](https://img.shields.io/npm/v/remark-hpcc-graphviz-svg.svg)](https://npmjs.org/package/remark-hpcc-graphviz-svg)
 
-A remark plugin to convert GraphViz code into SVG diagram
+A remark plugin to convert GraphViz code into SVG diagram. 
+
+Modified from https://github.com/DCsunset/remark-graphviz-svg
 
 ## Features
 
 * Custom language name for code blocks
-* Support different GraphViz [engines](https://graphviz.org/docs/layouts/)
 * SVG Optimization using [svgo](https://github.com/svg/svgo)
 
 ## Installation
 
 ```
-npm install remark-graphviz-svg
+npm install remark-hpcc-graphviz-svg
 ```
 
 Note: This package uses [ESM](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
@@ -21,11 +22,12 @@ Use Node 12+ and ESM import syntax to use this package.
 
 ## Usage
 
+### Basic
 ```js
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
-import { remarkGraphvizSvg } from "remark-graphviz-svg";
+import { remarkGraphvizSvg } from "remark-hpcc-graphviz-svg";
 import fs from "fs";
 
 const processor = unified()
@@ -41,12 +43,28 @@ const content = await processor.process(
 console.log(content.value);
 ```
 
+### Nextra
+
+```js
+import { remarkGraphvizSvg } from 'remark-hpcc-graphviz-svg';
+
+const withNextra = nextra({
+    theme: 'nextra-theme-docs',
+    themeConfig: './theme.config.tsx',
+    mdxOptions: {
+        remarkPlugins: [
+            remarkGraphvizSvg,
+        ],
+    },
+})
+```
+
 Suppose the `example.md` has the following content:
 
 ````md
 # Hello, world
 
-```graphviz
+```dot
 digraph {
   A -> B
 }
@@ -66,7 +84,6 @@ Then the output of the above code is similar to the following:
 ## Options
 
 * `language`: Render GraphViz diagrams on specific language blocks. (Default: `graphviz`)
-* `graphvizEngine`: GraphViz engine to use. See available engines [here](https://graphviz.org/docs/layouts/). (Default: `dot`)
 * `svgoOptions`: Override default svgo options. Set it to `null` to disable svgo. (Default: `defaultSvgoOptions`)
 
 ## License
